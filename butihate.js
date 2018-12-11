@@ -51,7 +51,6 @@ var build_first_interface = function () {
 
     $('#search_loc').on('click', () => {
 		let originLocation = $('#departure').val();
-		console.log(root_url + "/airports?filter[city]="+originLocation);
 	
 		$.ajax(root_url + "/airports?filter[city]="+originLocation,
 			   {
@@ -59,7 +58,6 @@ var build_first_interface = function () {
 			   xhrFields: {withCredentials: true},
 			   success: (airport) => {
 				   for (i = 0; i < airport.length; i++) {
-					console.log(airport[i].city);
 					body.append("<li>" + airport[i].name + "</li>");
 				   }				   
 			   },
