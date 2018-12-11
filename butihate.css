@@ -1,3 +1,7 @@
+html,body{
+    height: 100%;
+}
+
 #titleHeader{
     text-align: center;
 }
@@ -11,6 +15,7 @@
 
 #leftDiv {
     border: thin solid black;
+    
 }
 
 #rightDiv{
