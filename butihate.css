@@ -1,0 +1,7 @@
+.question {
+    border: thin solid black;
+}
+
+.answered {
+    background: green;
+}
