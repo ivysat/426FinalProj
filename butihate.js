@@ -38,7 +38,27 @@ var build_first_interface = function () {
     body.empty();
 
 	body.append('<h1>I Wanna Leave <input type = "text" id = "originLocation" placeholder = "Raleigh" </input> </h1>');
-	//body.append('');
+	body.append("<button id='search_loc'>Submit Location</button></div>");
+
+    $('#search_loc').on('click', () => {
+		let originLocation = $('#originLocation').val();
+		console.log(root_url + "/airports?filter[city]="+originLocation);
+	
+		$.ajax(root_url + "/airports?filter[city]="+originLocation,
+			   {
+			   type: 'GET',
+			   xhrFields: {withCredentials: true},
+			   success: (airport) => {
+				   for (i = 0; i < airport.length; i++) {
+					console.log(airport[i].city);
+					body.append("<li>" + airport[i].name + "</li>");
+				   }				   
+			   },
+			   error: () => {
+				   console.log("fuq");
+			   }
+			   });
+		});
     
     let qlist = $('<div></div>');
 
