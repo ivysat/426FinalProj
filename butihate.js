@@ -8,28 +8,32 @@ $(document).ready(() => {
 
 	console.log(user);
 	console.log(pass);
+
 	
 	build_first_interface();
 
-	 $.ajax(root_url + '/sessions',
-	        {
-	 	   type: 'POST',
-	 	   xhrFields: {withCredentials: true},
-	 	   data: {
-	 	       username: user,
-	 	       password: pass
-	 	   },
-	 	   success: (response) => {
-	 	       if (response.status) {
-	 		   build_first_interface();
-	 	       } else {
-	 		   $('#mesg_div').html("Login failed. Try again.");
- 	       	       }
-	 	   },
-	 	   error: () => {
- 		       alert('error');
-	 	   }
-	        });
+
+	$.ajax(root_url+'/sessions',{
+		type:'POST',
+		xhrFields: {withCredentials: true},
+		user:{
+		  username:user,
+		  password:pass
+		},
+		success: (response) => {
+			if (response.status) {
+			build_first_interface();
+			console.log('Sign in gucci!');
+			} else {
+			$('#mesg_div').html("Login failed. Try again.");
+				   }
+		},
+		error: () => {
+			alert('error');
+		}
+	});
+			
+	
 });
 
 var build_first_interface = function () {
