@@ -1,7 +1,23 @@
-.question {
-    border: thin solid black;
+html,body{
+    height: 100%;
 }
 
-.answered {
-    background: green;
+#titleHeader{
+    text-align: center;
+}
+
+#containerDiv {
+    border: thin solid black;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+
+#leftDiv {
+    border: thin solid black;
+    
+}
+
+#rightDiv{
+    border: thin solid black;
 }

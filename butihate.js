@@ -37,11 +37,12 @@ var build_first_interface = function () {
 
     body.empty();
 
-	body.append('<h1>I Wanna Leave <input type = "text" id = "originLocation" placeholder = "Raleigh" </input> </h1>');
+	body.append('<h1 id = "titleHeader">I Wanna Leave <input type = "text" id = "departure" placeholder = "Raleigh" </input>, But I Hate...</h1>');
 	body.append("<button id='search_loc'>Submit Location</button></div>");
+	body.append('<div id = "containerDiv"> <div id = "leftDiv"></div> <div id = "rightDiv"></div> </div>');
 
     $('#search_loc').on('click', () => {
-		let originLocation = $('#originLocation').val();
+		let originLocation = $('#departure').val();
 		console.log(root_url + "/airports?filter[city]="+originLocation);
 	
 		$.ajax(root_url + "/airports?filter[city]="+originLocation,
@@ -62,7 +63,7 @@ var build_first_interface = function () {
     
     let qlist = $('<div></div>');
 
-    body.append(qlist);
+    //body.append(qlist);
 
     // $.ajax(root_url + "/questions",
 	//    {
