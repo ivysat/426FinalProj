@@ -17,11 +17,14 @@ html,body{
     border: thin solid black;
     position: relative;
     float: left;
-    
+    height: 90%;
+    width: 40%;
 }
 
 #rightDiv{
     border: thin solid black;
     position: relative;
     float: right;
+    height: 90%;
+    width: 40%;
 }
