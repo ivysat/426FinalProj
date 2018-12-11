@@ -15,9 +15,13 @@ html,body{
 
 #leftDiv {
     border: thin solid black;
+    position: relative;
+    float: left;
     
 }
 
 #rightDiv{
     border: thin solid black;
+    position: relative;
+    float: right;
 }
