@@ -16,9 +16,9 @@ $(document).ready(() => {
 	$.ajax(root_url+'/sessions',{
 		type:'POST',
 		xhrFields: {withCredentials: true},
-		user:{
-		  username:user,
-		  password:pass
+		"user":{
+		  "username": user,
+		  "password": pass
 		},
 		success: (response) => {
 			if (response.status) {
