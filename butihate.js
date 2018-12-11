@@ -15,20 +15,16 @@ $(document).ready(() => {
 
 	$.ajax(root_url+'/sessions',{
 		type:'POST',
-		data:{
-			"user":{
-				"username": user,
-				"password": pass
-			  }
-		},
 		xhrFields: {withCredentials: true},
-		success: (response) => {
-			if (response.status) {
-			build_first_interface();
-			console.log('Sign in gucci!');
-			} else {
-			$('#mesg_div').html("Login failed. Try again.");
+		
+		data: {
+			"user":{
+		  		"username":user,
+		  		"password":pass
 			}
+		},
+		success: () => {
+			console.log('Sign in gucci!');
 		},
 		error: () => {
 			alert('error');
