@@ -1,9 +1,15 @@
 html,body{
     height: 100%;
+    font-family: 'Quattrocento', serif;
+}
+
+#loginStatus{
+    text-align: center;
 }
 
 #titleHeader{
     text-align: center;
+    font: bold;
 }
 
 #containerDiv {
