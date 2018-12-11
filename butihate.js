@@ -38,11 +38,11 @@ var build_first_interface = function () {
     body.empty();
 
 	body.append('<h1>I wanna leave <input type = "text" id = "departure" placeholder = "Raleigh" </input>, but I hate... </h1>');
-	//body.append('');
+	body.append('<div id = "containerDiv"> <div id = "leftDiv"></div> <div id = "rightDiv"></div> </div>');
     
     let qlist = $('<div></div>');
 
-    body.append(qlist);
+    //body.append(qlist);
 
     // $.ajax(root_url + "/questions",
 	//    {
