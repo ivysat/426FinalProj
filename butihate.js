@@ -9,9 +9,6 @@ $(document).ready(() => {
 	console.log(user);
 	console.log(pass);
 
-	
-	build_first_interface();
-
 
 	$.ajax(root_url+'/sessions',{
 		type:'POST',
@@ -25,6 +22,7 @@ $(document).ready(() => {
 		},
 		success: () => {
 			console.log('Sign in gucci!');
+			build_first_interface();
 		},
 		error: () => {
 			alert('error');
