@@ -37,7 +37,8 @@ var build_first_interface = function () {
 
     body.empty();
 
-    body.append('<h1>Questions and Answers</h1>');
+	body.append('<h1>I Wanna Leave <input type = "text" id = "originLocation" placeholder = "Raleigh" </input> </h1>');
+	//body.append('');
     
     let qlist = $('<div></div>');
 
