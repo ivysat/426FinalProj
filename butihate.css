@@ -1,3 +1,7 @@
+#titleHeader{
+    text-align: center;
+}
+
 #containerDiv {
     border: thin solid black;
 }
