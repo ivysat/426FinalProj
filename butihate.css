@@ -4,6 +4,9 @@
 
 #containerDiv {
     border: thin solid black;
+    width: 90%;
+    height: 90%;
+    margin: auto;
 }
 
 #leftDiv {

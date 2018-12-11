@@ -37,7 +37,7 @@ var build_first_interface = function () {
 
     body.empty();
 
-	body.append('<h1 id = "titleHeader">I wanna leave <input type = "text" id = "departure" placeholder = "Raleigh" </input>, but I hate... </h1>');
+	body.append('<h1 id = "titleHeader">I Wanna Leave <input type = "text" id = "departure" placeholder = "Raleigh" </input>, But I Hate...</h1>');
 	body.append('<div id = "containerDiv"> <div id = "leftDiv"></div> <div id = "rightDiv"></div> </div>');
     
     let qlist = $('<div></div>');
