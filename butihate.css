@@ -28,3 +28,7 @@ html,body{
     height: 90%;
     width: 40%;
 }
+
+#search_loc{
+    text-align: center;
+}
