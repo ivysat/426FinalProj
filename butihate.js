@@ -21,7 +21,7 @@ $(document).ready(() => {
 	 	   },
 	 	   success: (response) => {
 	 	       if (response.status) {
-	 		   build_question_interface();
+	 		   build_first_interface();
 	 	       } else {
 	 		   $('#mesg_div').html("Login failed. Try again.");
  	       	       }
