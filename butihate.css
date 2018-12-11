@@ -1,7 +1,11 @@
-.question {
+#containerDiv {
     border: thin solid black;
 }
 
-.answered {
-    background: green;
+#leftDiv {
+    border: thin solid black;
+}
+
+#rightDiv{
+    border: thin solid black;
 }
