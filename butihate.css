@@ -28,7 +28,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
     width: 90%;
     height: 90%;
     margin: auto;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 #leftDiv {
@@ -39,12 +39,12 @@ input[type="text"]:focus::-webkit-input-placeholder{
     width: 40%;
     margin-left: 5%;
     margin-top: 2.5%;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 #whatTheyHateTitleContainer{
     position: relative;
-    border-radius: 20px;
+    border-radius: 15px;
     height: 10%;
     width: 100%;
     border: thin solid #BC918F;
@@ -56,7 +56,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
 
 #flightDataTitleContainer{
     position: relative;
-    border-radius: 20px;
+    border-radius: 15px;
     height: 10%;
     width: 100%;
     border: thin solid #BC918F;
@@ -70,7 +70,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
     width: 40%;
     margin-right: 5%;
     margin-top: 2.5%;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 .autocomplete {
