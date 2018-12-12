@@ -5,6 +5,15 @@ html,body{
     background: lightgray;
 }
 
+input[type="text"]::-webkit-input-placeholder{
+    -webkit-transition: opacity 0.4s linear; 
+    color: gray;
+  }
+  
+input[type="text"]:focus::-webkit-input-placeholder{
+    opacity: 0;
+}
+
 #loginStatus{
     text-align: center;
 }
@@ -19,7 +28,7 @@ html,body{
     width: 90%;
     height: 90%;
     margin: auto;
-    border-radius: 25px;
+    border-radius: 20px;
 }
 
 #leftDiv {
@@ -30,7 +39,27 @@ html,body{
     width: 40%;
     margin-left: 5%;
     margin-top: 2.5%;
-    border-radius: 25px;
+    border-radius: 20px;
+}
+
+#whatTheyHateTitleContainer{
+    position: relative;
+    border-radius: 20px;
+    height: 10%;
+    width: 100%;
+    border: thin solid #BC918F;
+}
+
+#whatTheyHateTitle, #flightDataTitle{
+    text-align: center;
+}
+
+#flightDataTitleContainer{
+    position: relative;
+    border-radius: 20px;
+    height: 10%;
+    width: 100%;
+    border: thin solid #BC918F;
 }
 
 #rightDiv{
@@ -41,7 +70,7 @@ html,body{
     width: 40%;
     margin-right: 5%;
     margin-top: 2.5%;
-    border-radius: 25px;
+    border-radius: 20px;
 }
 
 .autocomplete {

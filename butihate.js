@@ -45,9 +45,9 @@ var build_first_interface = function () {
 
     body.empty();
 
-	body.append('<h1 id = "titleHeader">I Wanna Leave  <div class="autocomplete"><input type = "text" id = "departure" placeholder = "Raleigh-durham" </input></div>, But I Hate...</h1>');
+	body.append('<h1 id = "titleHeader">I Hate  <div class="autocomplete"><input type = "text" id = "departure" placeholder = "Raleigh-durham" </input></div>, But I <i>Really</i> Hate...</h1>');
 	body.append("<button id='search_loc'>Let's Go!</button></div>");
-	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHate"></div></div> <div id = "rightDiv"><div id="flightData"></div></div> </div>');
+	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2></div></div> <div id = "rightDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Maybe you won\'t hate these...</h2></div></div> </div>');
 
     $('#search_loc').on('click', () => {
 		let originLocation = $('#departure').val();
