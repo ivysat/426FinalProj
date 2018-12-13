@@ -46,15 +46,25 @@ var build_first_interface = function () {
     body.empty();
 
 	body.append('<h1 id = "titleHeader">I Hate  <div class="autocomplete"><input type = "text" id = "departure" placeholder = "Raleigh-durham" </input></div>, But I <i>Really</i> Hate...</h1>');
-	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2><div id = "radioButtonContainer"></div></div></div> <div id = "rightDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Maybe you won\'t hate these...</h2></div></div> </div>');
+	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2><div id = "radioButtonContainer"></div></div></div> <div id = "rightDiv" class="rhsDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Maybe you won\'t hate these...</h2></div></div> </div>');
 	let radioButtonContainerDiv = $('#radioButtonContainer').append('<input type="radio" name="age" value="babies"> Babies<br><input type="radio" name="age" value="children"> Children<br><input type="radio" name="age" value="Teenagers"> Teenagers<br><input type="radio" name="age" value="millenials"> Millenials<br><input type="radio" name="age" value="genXers"> Gen Xers<br><input type="radio" name="age" value="boomers"> Baby Boomers<br><input type="radio" name="age" value="traditionalists"> Traditionalists<br>  <input type="submit" value="Submit">');
 
     $('input[type="radio"]').on('click', () => {
+		let selected = document.querySelector('input[name="age"]:checked').value;
+		console.log(selected);
 		let originLocation = $('#departure').val();
+		try {
+			let cont = document.getElementById('flightsContainer');
+			cont.parentNode.removeChild(cont);
+		} catch (err) {
+			//For first load, do nothing
+		}
+
+		var $flightsContainer = $('<div id="flightsContainer">Howdy</>');
+		
 
 		//Make sure only returning flights today or later
 		let currentDatetime = new Date(); 
-		console.log(currentDatetime);
 
 
 		//Map flight -> instances
@@ -74,7 +84,7 @@ var build_first_interface = function () {
 						 return;
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
-								console.log(airports[i].name);
+								let airport = airports[i];
 								
 								$.ajax(root_url + "/flights?filter[departure_id]="+ airports[i].id, 
 								{
@@ -104,12 +114,51 @@ var build_first_interface = function () {
 														let date = String(instances[k].date).split('-');
 														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
 														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
+														//Get number of seats on flight containing age range
+														count = 0;
+
+														if (selected == "babies") {
+															for (l = 0; l < 6; l++) {
+																count += getNumTickets(l);
+															}
+														} else if (selected == "children") {
+															for (l = 6; l < 13; l++) {
+																count += getNumTickets(l);
+															}
+														} else if (selected == "Teenagers") {
+															for (l = 13; l < 19; l++) {
+																count += getNumTickets(l);
+															}
+														} else if (selected == "millenials") {
+															for (l = 19; l < 31; l++) {
+																count += getNumTickets(l);
+															}
+														} else if (selected == "genXers") {
+															for (l = 31; l < 54; l++) {
+																count += getNumTickets(l);
+															}
+														} else if (selected == "boomers") {
+															for (l = 54; l < 73; l++) {
+																count += getNumTickets(l);
+															}
+														} else {
+															for (l = 73; l < 101; l++) {
+																count += getNumTickets(l);
+															}
+														}
+
+													
 															
 															
 														//For each ticket that matches that flight id, check value from radio button
 														//Append to RHS sorted by that value
-
-
+														let $flightDiv = ('<div class="flight">Airport:' + airport.name + '<br/>\
+														Destination:\
+														Departure time:   Arrival Time:\
+														Flight Number:\
+														Number of' + selected +':' + '</div>');
+														let $sortAlph = $('<button type="button" id="checkout" class="sort">Buy Ticket</>');
+														$flightDiv.appendTo($flightsContainer);
 
 
 
@@ -119,7 +168,6 @@ var build_first_interface = function () {
 												},
 												error:(e) => {
 													console.log(e);
-													alert("Error finding instances!");
 												} 
 											});
 										}
@@ -141,12 +189,30 @@ var build_first_interface = function () {
 					 //LATER NEED TO UPDATE RHS TO BE EMPTY
 				   alert("Error retrieving airport!");
 			   }
+			   //Add airport div to RHS
+
 			  });
+			  $flightsContainer.appendTo($('.rhsDiv'));
+
+
+
 		});
 
 
 
-    
+    function getNumTickets(instanceId, age) {
+		$.ajax(root_url + "/tickets?filter[city]="+originLocation,
+		{
+		  type: 'GET',
+		  xhrFields: {withCredentials: true},
+		  success: (airports) => {
+
+		  },
+		   error: () => {
+
+		  }
+		});
+	}
 	
 	function autocomplete(inp, arr) {
 		/*execute a function when someone writes in the text field:*/
@@ -193,6 +259,15 @@ var build_first_interface = function () {
 	  document.addEventListener("click", function (e) {
 		  closeAllLists(e.target);
 	  });
+	  }
+
+	  function buyTicket() {
+		//Give unique id to customer
+		//Rebuild DOM for simple checkout screen
+	  }
+
+	  function returnToSearch() {
+		//Button on second 
 	  }
 
 	  autocomplete(document.getElementById("departure"), cities);
