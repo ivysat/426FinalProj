@@ -16,7 +16,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
 
 #radioButtonContainer{
     position: relative;
-    line-height: 100px;
+    line-height: 110px;
     text-align: center;
 }
 
