@@ -59,6 +59,7 @@ var build_first_interface = function () {
 			   success: (airport) => {
 				   for (i = 0; i < airport.length; i++) {
 					body.append("<li>" + airport[i].name + "</li>");
+					console.log(airport[i].name);
 				   }				   
 			   },
 			   error: () => {
