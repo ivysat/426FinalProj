@@ -17,6 +17,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
 #radioButtonContainer{
     position: relative;
     line-height: 100px;
+    text-align: center;
 }
 
 #loginStatus{
