@@ -8,10 +8,15 @@ html,body{
 input[type="text"]::-webkit-input-placeholder{
     -webkit-transition: opacity 0.4s linear; 
     color: gray;
-  }
+}
   
 input[type="text"]:focus::-webkit-input-placeholder{
     opacity: 0;
+}
+
+#radioButtonContainer{
+    position: relative;
+    line-height: 100px;
 }
 
 #loginStatus{
