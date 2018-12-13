@@ -51,6 +51,16 @@ var build_first_interface = function () {
 
     $('#search_loc').on('click', () => {
 		let originLocation = $('#departure').val();
+
+		//Make sure only returning flights today or later
+		let currentDatetime = new Date(); 
+		console.log(currentDatetime);
+
+
+		//Map flight -> instances
+		//Map instances -> tickets	
+		let flightInfo = new Map();
+		
 	
 		$.ajax(root_url + "/airports?filter[city]="+originLocation,
 			 {
@@ -65,15 +75,49 @@ var build_first_interface = function () {
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
 								console.log(airports[i].name);
-								$.ajax(root_url + "/flights?filter[departure_id]="+ airports.id, {
+								
+								$.ajax(root_url + "/flights?filter[departure_id]="+ airports[i].id, 
+								{
+
 									type: 'GET',
 									xhrFields: {withCredentials: true},
 									success: (flights) => {
+								
+										//Get each flight matching constraints
 										for (j = 0; j < flights.length; j++) {
+											//Store time to check valid booking
+											let departsAt = new Date(flights[j].departs_at);
 
+											//Get and store instances of that flight
+											$.ajax(root_url + "/instances?filter[flight_id]=" + flights[j].id, {
+												type: 'GET',
+												xhrFields: {withCredentials: true},
+												success: (instances) => {
+													
+													if (instances.length == 0) {
+														alert("We couldn't find any flight instances from that destination");
+														return;
+													}
+													
+													//Only do flights that are in the future and not cancelled
+													for (k = 0; k < instances.length; k++) {
+														let date = String(instances[k].date).split('-');
+														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
+														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
+															console.log(instances[k]);
+															console.log(instances[k].is_cancelled);
+														}
+													}
+												},
+												error:(e) => {
+													console.log(e);
+													alert("Error finding instances!");
+												} 
+											});
 										}
 									},
 									error: () => {
+										//NEED TO EMPTY RIGHTDIV
 										alert("Failed to find any flights from that city");
 									}
 
