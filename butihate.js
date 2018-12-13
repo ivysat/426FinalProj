@@ -49,7 +49,7 @@ var build_first_interface = function () {
 	body.append("<button id='search_loc'>Let's Go!</button></div>");
 	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2></div></div> <div id = "rightDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Maybe you won\'t hate these...</h2></div></div> </div>');
 
-    $('#search_loc').on('click', () => {
+    $('input[type="radio"]').on('click', () => {
 		let originLocation = $('#departure').val();
 
 		//Make sure only returning flights today or later
@@ -104,8 +104,14 @@ var build_first_interface = function () {
 														let date = String(instances[k].date).split('-');
 														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
 														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
-															console.log(instances[k]);
-															console.log(instances[k].is_cancelled);
+															
+															
+														//For each ticket that matches that flight id, check value from radio button
+														//Append to RHS sorted by that value
+
+
+
+
 														}
 													}
 												},
