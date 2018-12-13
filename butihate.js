@@ -88,7 +88,7 @@ var build_first_interface = function () {
 											//Store time to check valid booking
 											let departsAt = new Date(flights[j].departs_at);
 
-											//Get instances of that flight
+											//Get and store instances of that flight
 											$.ajax(root_url + "/instances?filter[flight_id]=" + flights[j].id, {
 												type: 'GET',
 												xhrFields: {withCredentials: true},
@@ -99,11 +99,14 @@ var build_first_interface = function () {
 														return;
 													}
 													
+													//Only do flights that are in the future and not cancelled
 													for (k = 0; k < instances.length; k++) {
 														let date = String(instances[k].date).split('-');
 														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
-														console.log(flightDatetime);
-														console.log(instances[k]);
+														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
+															console.log(instances[k]);
+															console.log(instances[k].is_cancelled);
+														}
 													}
 												},
 												error:(e) => {
