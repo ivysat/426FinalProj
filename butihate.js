@@ -53,33 +53,48 @@ var build_first_interface = function () {
 		let originLocation = $('#departure').val();
 	
 		$.ajax(root_url + "/airports?filter[city]="+originLocation,
-			   {
+			 {
 			   type: 'GET',
 			   xhrFields: {withCredentials: true},
-			   success: (airport) => {
-				   for (i = 0; i < airport.length; i++) {
-					body.append("<li>" + airport[i].name + "</li>");
-					console.log(airport[i].name);
-				   }				   
-			   },
+			   success: (airports) => {
+
+					 if (airports.length == 0) {
+						 //LATER NEED TO UPDATE RHS TO BE EMPTY
+						 alert("Failed to find any airports in that city");
+						 return;
+					 } else {
+							for  (i = 0; i < airports.length; i++) {
+								console.log(airports[i].name);
+								$.ajax(root_url + "/flights?filter[departure_id]="+ airports.id, {
+									type: 'GET',
+									xhrFields: {withCredentials: true},
+									success: (flights) => {
+										for (j = 0; j < flights.length; j++) {
+
+										}
+									},
+									error: () => {
+										alert("Failed to find any flights from that city");
+									}
+
+								});
+
+							}
+
+
+				 }
+				},
+				 //Fail to find airport
 			   error: () => {
-				   console.log("fuq");
+					 //LATER NEED TO UPDATE RHS TO BE EMPTY
+				   alert("Error retrieving airport!");
 			   }
-			   });
+			  });
 		});
 
 
 
     
-    let qlist = $('<div></div>');
-
-
-    let create_question_div = (question) => {
-	let qdiv = $('<div class="question" id="qid_' + question.id + '"></div>');
-	qdiv.append('<div class="qtitle">' + question.title + '</div>');
-	qdiv.append('<div class="count">' + question.answerCount + '</div>');
-	return qdiv;
-	}
 	
 	function autocomplete(inp, arr) {
 		/*execute a function when someone writes in the text field:*/
