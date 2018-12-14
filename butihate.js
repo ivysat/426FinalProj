@@ -25,7 +25,7 @@ $(document).ready(() => {
 			build_first_interface();
 		},
 		error: () => {
-			alert('error');
+			alert('error signing in, please try again');
 		}
 	});
 			
@@ -80,7 +80,8 @@ var build_first_interface = function () {
 
 					 if (airports.length == 0) {
 						 //LATER NEED TO UPDATE RHS TO BE EMPTY
-						 alert("Failed to find any airports in that city");
+						 console.log("Failed to find any airports in that city");
+						 document.getElementById("rightDiv").innerHTML = "We couldn't find any flights";
 						 return;
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
@@ -105,7 +106,8 @@ var build_first_interface = function () {
 												success: (instances) => {
 													
 													if (instances.length == 0) {
-														alert("We couldn't find any flight instances from that destination");
+														document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
+														console.log("We couldn't find any flight instances from that destination");
 														return;
 													}
 													
@@ -148,6 +150,7 @@ var build_first_interface = function () {
 																count += getNumTickets(String(instances[k].id), l);
 															}
 														}
+														console.log(count);
 
 													
 															
@@ -212,7 +215,7 @@ var build_first_interface = function () {
 			return parseInt(tickets.length);
 		  },
 		   error: () => {
-			alert("error getting number of unwanted people");
+			console.log("error getting number of unwanted people");
 		  }
 		});
 	}
