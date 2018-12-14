@@ -127,46 +127,8 @@ var build_first_interface = function () {
 														let date = String(instances[k].date).split('-');
 														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
 														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
-														//Get number of seats on flight containing age range
-														count = 0;
+												
 
-														
-
-														if (selected == "babies") {
-															for (l = 1; l < 6; l++) {
-																//console.log(instances[k].id);
-																//console.log(getNumTickets(String(instances[k].id), l));
-																count += getNumTickets(String(instances[k].id), l);
-															}
-															
-														} else if (selected == "children") {
-															for (l = 6; l < 13; l++) {
-																count += getNumTickets(String(instances[k].id), l);
-															}
-														} else if (selected == "Teenagers") {
-															for (l = 13; l < 19; l++) {
-																count += getNumTickets(String(instances[k].id), l);
-															}
-														} else if (selected == "millenials") {
-															for (l = 19; l < 31; l++) {
-																count += getNumTickets(String(instances[k].id), l);
-															}
-														} else if (selected == "genXers") {
-															for (l = 31; l < 54; l++) {
-																count += getNumTickets(String(instances[k].id), l);
-															}
-														} else if (selected == "boomers") {
-															for (l = 54; l < 73; l++) {
-																count += getNumTickets(String(instances[k].id), l);
-															}
-														} else {
-															for (l = 73; l < 101; l++) {
-																count += getNumTickets(String(instances[k].id), l);
-															}
-														}
-
-													
-															
 														//For each ticket that matches that flight id, check value from radio button
 														//Append to RHS sorted by that value
 														let $flightDiv = $('<div class="flight"> Destination:  ' + destination +
@@ -174,13 +136,50 @@ var build_first_interface = function () {
 														'<br> Flight Number:  '+ number + '' + 
 														'<br> Departure time:  ' + String(departsAt.getHours()) + ':' + String(departsAt.getMinutes()) +  
 														'<br> Arrival Time:  ' + String(arrivesAt.getHours()) + ':' + String(arrivesAt.getMinutes()) + 
-														'<br> Number of ' + selected +': ' + count + '</div>');
+														'<br> Number of ' + selected +': </div>');
+
+														let $countDiv = $('<div id=' + instances[k].id + '>0</div>');
+														$countDiv.appendTo($flightDiv);
+
+														if (selected == "babies") {
+															for (l = 1; l < 6; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+															
+														} else if (selected == "children") {
+															for (l = 6; l < 13; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+														} else if (selected == "Teenagers") {
+															for (l = 13; l < 19; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+														} else if (selected == "millenials") {
+															for (l = 19; l < 31; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+														} else if (selected == "genXers") {
+															for (l = 31; l < 54; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+														} else if (selected == "boomers") {
+															for (l = 54; l < 73; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+														} else {
+															for (l = 73; l < 101; l++) {
+																getNumTickets(String(instances[k].id), l);
+															}
+														}
+
+													
+															
+
 
 
 														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="build_second_interface();">Buy Ticket</>');
 
 														//On checkout click, tear down and reacreate DOM
-														//ADD BUTTON FUNCTIONALITY
 														$checkOut.appendTo($flightDiv);
 														$flightDiv.appendTo($flightsContainer);
 
@@ -235,7 +234,22 @@ var build_first_interface = function () {
 
 		});
 
-
+	//Instance will be unique id for num div
+	function getNumTickets(instance, age) {
+		$.ajax(root_url+'/tickets?filter[age]='+age+'&filter[instance_id]='+instance, {
+			type:'GET',
+			xhrFields: {withCredentials: true},
+			success: (num) => {
+				let curDiv = document.getElementById(instance);
+				let curCount = parseInt(curDiv.textContent);
+				curCount += num.length;
+				curDiv.innerHTML = String(curCount);
+			},
+			error: () => {
+				alert('error signing in, please try again');
+			}
+		});
+	}
 
 	
 	function autocomplete(inp, arr) {
