@@ -77,6 +77,7 @@ var build_first_interface = function () {
 			   type: 'GET',
 			   xhrFields: {withCredentials: true},
 			   success: (airports) => {
+					document.getElementById("rightDiv").innerHTML = "Searching for your ideal flights...";
 				   console.log(originLocation);
 					
 					 if (airports.length == 0) {
@@ -138,8 +139,9 @@ var build_first_interface = function () {
 														'<br> Arrival Time:  ' + String(arrivesAt.getHours()) + ':' + String(arrivesAt.getMinutes()) + 
 														'<br> Number of ' + selected +': </div>');
 
-														let $countDiv = $('<div id=' + instances[k].id + '>0</div>');
+														let $countDiv = $('<div id=' + instances[k].id + 'style="display: none;>0</div>');
 														$countDiv.appendTo($flightDiv);
+														
 
 														if (selected == "babies") {
 															for (l = 1; l < 6; l++) {
@@ -176,7 +178,7 @@ var build_first_interface = function () {
 															
 
 
-
+														
 														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="build_second_interface();">Buy Ticket</>');
 
 														//On checkout click, tear down and reacreate DOM
@@ -235,7 +237,7 @@ var build_first_interface = function () {
 		});
 
 	//Instance will be unique id for num div
-	function getNumTickets(instance, age) {
+	function getNumTickets(instance, age, obj) {
 		$.ajax(root_url+'/tickets?filter[age]='+age+'&filter[instance_id]='+instance, {
 			type:'GET',
 			xhrFields: {withCredentials: true},
