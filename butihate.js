@@ -92,7 +92,6 @@ var build_first_interface = function () {
 					 if (airports.length == 0) {
 						 //LATER NEED TO UPDATE RHS TO BE EMPTY
 						 console.log("Failed to find any airports in that city");
-						 document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
 						 return;
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
@@ -134,6 +133,7 @@ var build_first_interface = function () {
 													
 													//Only do flights that are in the future and not cancelled
 													for (k = 0; k < instances.length; k++) {
+														
 														let date = String(instances[k].date).split('-');
 														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
 														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
@@ -187,7 +187,7 @@ var build_first_interface = function () {
 
 
 
-														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="$.xhrPool.abortAll();build_second_interface();">Buy Ticket</>');
+														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="$.xhrPool.abortAll();build_second_interface('+instances[k].id+');">Buy Ticket</>');
 
 														//On checkout click, tear down and reacreate DOM
 														$checkOut.appendTo($flightDiv);
@@ -326,14 +326,7 @@ var build_first_interface = function () {
 	  });
 	  }
 
-	  function buyTicket() {
-		//Give unique id to customer
-		//Rebuild DOM for simple checkout screen
-	  }
-
-	  function returnToSearch() {
-		//Button on second 
-	  }
+	
 
 	  autocomplete(document.getElementById("departure"), cities);
 
@@ -342,18 +335,47 @@ var build_first_interface = function () {
 
 };
 
-var build_second_interface = function(){
+var build_second_interface = function(instance){
 	console.log("clearing");
 	let outerContainer = $("#containerDiv");
 	outerContainer.empty();
 	outerContainer.html('<div id = bookFlightContainer>\
 	<div id="dataInputContainer">\
+	<form id ="booking">\
 	<input type = "text" class="bookData" id = "firstName" placeholder = "First name"</input>\
 	<input type = "text" class="bookData" id = "lastName" placeholder = "Last name"</input>\
 	<input type = "text" class="bookData" id = "age" placeholder = "Age (1+)" </input>\
 	<input type = "text" class="bookData" id = "gender" placeholder = "Gender"</input>\
-	<button type = "button" id = "goBackButton" onclick = "build_first_interface();">\
-	I Hate This, Go Back!</button>\
+	<br><button type = "submit" value ="Book My Flight!" id="book"></button>\
+	<button type = "submit" id = "goBackButton" onclick = "build_first_interface();">I Hate This, Go Back!</button>\
+	</form>\
 	</div>');
+
+	$('#book').click(function() {
+		console.log('???');
+		$("#firstName").value();
+		console.log($("#firstName").value());
+		//Update Seats (info = booked), get available seat then take
+		$.ajax(root_url+'/seats',{
+			type:'GET',
+			xhrFields: {withCredentials: true},
+			
+
+			success: () => {
+				console.log('Sign in gucci!');
+				build_first_interface();
+			},
+			error: () => {
+				console.log('not yeet');
+			}
+		});
+
+		//Update Instance
+
+		//Update Itenerary
+
+
+		//Change Div to ticket (include all info from prev screen)
+	});
 
 };
