@@ -339,43 +339,12 @@ var build_second_interface = function(instance){
 	console.log("clearing");
 	let outerContainer = $("#containerDiv");
 	outerContainer.empty();
-	outerContainer.html('<div id = bookFlightContainer>\
-	<div id="dataInputContainer">\
-	<form id ="booking">\
-	<input type = "text" class="bookData" id = "firstName" placeholder = "First name"</input>\
-	<input type = "text" class="bookData" id = "lastName" placeholder = "Last name"</input>\
-	<input type = "text" class="bookData" id = "age" placeholder = "Age (1+)" </input>\
-	<input type = "text" class="bookData" id = "gender" placeholder = "Gender"</input>\
-	<br><button type = "submit" value ="Book My Flight!" id="book"></button>\
-	<button type = "submit" id = "goBackButton" onclick = "build_first_interface();">I Hate This, Go Back!</button>\
-	</form>\
-	</div>');
-
-	$('#book').click(function() {
-		console.log('???');
-		$("#firstName").value();
-		console.log($("#firstName").value());
-		//Update Seats (info = booked), get available seat then take
-		$.ajax(root_url+'/seats',{
-			type:'GET',
-			xhrFields: {withCredentials: true},
-			
-
-			success: () => {
-				console.log('Sign in gucci!');
-				build_first_interface();
-			},
-			error: () => {
-				console.log('not yeet');
-			}
-		});
-
-		//Update Instance
-
-		//Update Itenerary
-
-
-		//Change Div to ticket (include all info from prev screen)
+	outerContainer.html('<div id = bookFlightContainer><div id="dataInputContainer"><input type = "text" class="bookData" id = "firstName" placeholder = "First name"</input><input type = "text" class="bookData" id = "lastName" placeholder = "Last name"</input><input type = "text" class="bookData" id = "age" placeholder = "Age (1+)" </input><input type = "text" class="bookData" id = "gender" placeholder = "Gender"</input></div><button type = "button" id = "goBackButton">I Hate This, Go Back!</button><button type = "button" id = "submitButton">Book Now!</button></div>');
+	$( "#goBackButton" ).click(function() {
+		build_first_interface();
 	});
 
+	$("#submitButton").click(function(){
+		alert("hello");
+	});
 };
