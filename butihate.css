@@ -30,7 +30,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
 }
 
 #containerDiv {
-    border: thin solid #45b3e0;
+    border: solid #45b3e0;
     width: 90%;
     height: 90%;
     margin: auto;
@@ -38,7 +38,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
 }
 
 #leftDiv {
-    border: thin solid #f3fafd;
+    border: solid #f3fafd;
     position: relative;
     float: left;
     height: 90%;
@@ -52,8 +52,8 @@ input[type="text"]:focus::-webkit-input-placeholder{
     position: relative;
     border-radius: 15px;
     height: 10%;
-    width: 100%;
-    border: thin solid #BC918F;
+    width: 99%;
+    border: solid #BC918F;
 }
 
 #whatTheyHateTitle, #flightDataTitle{
@@ -64,12 +64,12 @@ input[type="text"]:focus::-webkit-input-placeholder{
     position: relative;
     border-radius: 15px;
     height: 10%;
-    width: 100%;
-    border: thin solid #BC918F;
+    width: 99%;
+    border: solid #BC918F;
 }
 
 #rightDiv{
-    border: thin solid #f3fafd;
+    border: solid #f3fafd;
     position: relative;
     float: right;
     height: 90%;
@@ -131,4 +131,20 @@ input[type="text"]:focus::-webkit-input-placeholder{
     text-align: center;
     position: relative;
     padding: 22px;
+}
+
+.flight{
+    border: solid black;
+    position: relative;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 2.5%;
+    border-radius: 15px;
+    text-align: center;
+}
+
+#flightsContainer{
+    overflow: scroll;
+    position: relative;
+    height: 85%;
 }
