@@ -146,5 +146,5 @@ input[type="text"]:focus::-webkit-input-placeholder{
 #flightsContainer{
     overflow: scroll;
     position: relative;
-    height: 85%;
+    height: 87%;
 }
