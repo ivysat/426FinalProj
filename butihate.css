@@ -18,6 +18,7 @@ input[type="text"]:focus::-webkit-input-placeholder{
     position: relative;
     line-height: 110px;
     text-align: center;
+    font-size: 25px;
 }
 
 #loginStatus{
