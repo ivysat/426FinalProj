@@ -98,12 +98,22 @@ var build_first_interface = function () {
 										for (j = 0; j < flights.length; j++) {
 											//Store time to check valid booking
 											let departsAt = new Date(flights[j].departs_at);
-											var arrivesT = flights[j].arrives_at;
-											var departsT = flights[j].departs_at;
-											var number = String(flights[j].number);
+											let arrivesAt = new Date(flights[j].arrives_at);
+											let number = String(flights[j].number);
+											let destination = "fuq async";
 											//Store Destination to generate ticket
+											$.ajax(root_url+'/airports/' + flights[j].arrival_id,{
+												type:'GET',
+												xhrFields: {withCredentials: true},	
+												success: (destination) => {
+													return String(destination.city) + '(' +  String(destination.code) + ")";
+												},
+												error: () => {
+													console.log('error getting destination');
+												}
+											});
+										  
 
-											console.log("Destiny" +  getDestination(flights[j].arrival_id));
 
 											//Get and store instances of that flight
 											$.ajax(root_url + "/instances?filter[flight_id]=" + flights[j].id, {
@@ -126,7 +136,7 @@ var build_first_interface = function () {
 														count = 0;
 
 														if (selected == "babies") {
-															for (l = 0; l < 6; l++) {
+															for (l = 1; l < 6; l++) {
 																//console.log(instances[k].id);
 																//console.log(getNumTickets(String(instances[k].id), l));
 																count += getNumTickets(String(instances[k].id), l);
@@ -160,16 +170,17 @@ var build_first_interface = function () {
 
 													
 															
-														let destination = "YEET";
 														//For each ticket that matches that flight id, check value from radio button
 														//Append to RHS sorted by that value
 														let $flightDiv = $('<div class="flight"> Destination:  ' + destination +
-														'<br>' +  airport.name + 
-														'<br> Departure time:  ' + String(departsT) +  
-														'<br> Arrival Time:  ' + String(arrivesT) + 
-														'<br> Flight Number:  '+ number + 
-														'<br> Number of' + selected +': ' + count + '</div>');
-														let $checkOut = $('<button type="button" id="checkout" class="sort">Buy Ticket</>');
+														'<br>' +  airport.name + '    on ' + flightDatetime.getFullYear() + ' ' + flightDatetime.getMonth() + ' ' + flightDatetime.getDay() +  
+														'<br> Flight Number:  '+ number + '' + 
+														'<br> Departure time:  ' + String(departsAt.getHours()) + ':' + String(departsAt.getMinutes()) +  
+														'<br> Arrival Time:  ' + String(arrivesAt.getHours()) + ':' + String(arrivesAt.getMinutes()) + 
+														'<br> Number of ' + selected +': ' + count + '</div>');
+
+
+														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="build_second_interface();">Buy Ticket</>');
 
 														//On checkout click, tear down and reacreate DOM
 														//ADD BUTTON FUNCTIONALITY
@@ -222,9 +233,12 @@ var build_first_interface = function () {
 		{
 		  type: 'GET',
 		  xhrFields: {withCredentials: true},
+		  async: false,
 		  success: (tickets) => {
+			console.log(tickets.length);
 			return parseInt(tickets.length);
 		  },
+
 		   error: () => {
 			console.log("error getting number of unwanted people");
 		  }
@@ -289,23 +303,7 @@ var build_first_interface = function () {
 
 	  autocomplete(document.getElementById("departure"), cities);
 
-	  function getDestination(id) {
-		  let dest = "wut";
-		$.ajax(root_url+'/airports/' + id,{
-			type:'GET',
-			xhrFields: {withCredentials: true},	
-			success: (destination) => {
-				dest =String(destination.city) + '(' +  String(destination.code) + ")";
-				return dest;
-				console.log("Return me" + dest);
-				return dest;
-			},
-			error: () => {
-				console.log('error getting destination');
-			}
-		});
-		return dest;
-	  }
+
 
 
 };
