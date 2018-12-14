@@ -1,5 +1,5 @@
 root_url = "http://comp426.cs.unc.edu:3001";
-
+var $ticket = $('<div class="ticket"></>');
 
 $(document).ready(() => {
 
@@ -33,6 +33,7 @@ $(document).ready(() => {
 });
 
 var build_first_interface = function () {
+	$ticket.empty();
 	let body = $('body');
 	
 	let cities = ["Kansas City","Phoenix","Newark","Fort Lauderdale","Miami","Long Beach","Savannah","Dayton","Little Rock","New York","Memphis","Boise","El Paso",
@@ -48,6 +49,14 @@ var build_first_interface = function () {
 	body.append('<h1 id = "titleHeader">I Hate  <div class="autocomplete"><input type = "text" id = "departure" placeholder = "Raleigh-durham" </input></div>, But I <i>Really</i> Hate...</h1>');
 	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2><div id = "radioButtonContainer"></div></div></div> <div id = "rightDiv" class="rhsDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Sheesh, maybe you won\'t hate these flights...</h2></div></div> </div>');
 	let radioButtonContainerDiv = $('#radioButtonContainer').append('<input type="radio" name="age" value="babies"> Babies<br><input type="radio" name="age" value="children"> Children<br><input type="radio" name="age" value="Teenagers"> Teenagers<br><input type="radio" name="age" value="millenials"> Millenials<br><input type="radio" name="age" value="genXers"> Gen Xers<br><input type="radio" name="age" value="boomers"> Baby Boomers<br><input type="radio" name="age" value="traditionalists"> Traditionalists<br>');
+
+	$(document).ajaxStart(function() {
+		alert("Retrieving information, please wait");
+	});
+	
+	$(document).ajaxStop(function () {
+		0 === $.active
+	});
 
     $('input[type="radio"]').on('click', () => {
 		let selected = document.querySelector('input[name="age"]:checked').value;
@@ -178,7 +187,7 @@ var build_first_interface = function () {
 
 
 
-														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="build_second_interface();">Buy Ticket</>');
+														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="$.xhrPool.abortAll();build_second_interface();">Buy Ticket</>');
 
 														//On checkout click, tear down and reacreate DOM
 														$checkOut.appendTo($flightDiv);
@@ -231,13 +240,30 @@ var build_first_interface = function () {
 			  });
 			  $flightsContainer.appendTo($('.rhsDiv'));
 
+			  $(function() {
+				$.xhrPool = [];
+				$.xhrPool.abortAll = function() {
+					$(this).each(function(i, jqXHR) {   //  cycle through list of recorded connection
+						jqXHR.abort();  //  aborts connection
+						$.xhrPool.splice(i, 1); //  removes from list by index
+					});
+				}
+				$.ajaxSetup({
+					beforeSend: function(jqXHR) { $.xhrPool.push(jqXHR); }, //  annd connection to list
+					complete: function(jqXHR) {
+						var i = $.xhrPool.indexOf(jqXHR);   //  get index for current connection completed
+						if (i > -1) $.xhrPool.splice(i, 1); //  removes from list by index
+					}
+				});
+			})
+
 
 
 		});
 
 	//Instance will be unique id for num div
 	function getNumTickets(instance, age) {
-		$.ajax(root_url+'/tickets?filter[age]='+age+'&filter[instance_id]='+instance, {
+		var request = $.ajax(root_url+'/tickets?filter[age]='+age+'&filter[instance_id]='+instance, {
 			type:'GET',
 			xhrFields: {withCredentials: true},
 			success: (num) => {
@@ -320,6 +346,14 @@ var build_second_interface = function(){
 	console.log("clearing");
 	let outerContainer = $("#containerDiv");
 	outerContainer.empty();
-	outerContainer.html('<div id = bookFlightContainer><div id="dataInputContainer"><input type = "text" class="bookData" id = "firstName" placeholder = "First name"</input><input type = "text" class="bookData" id = "lastName" placeholder = "Last name"</input><input type = "text" class="bookData" id = "age" placeholder = "Age (1+)" </input><input type = "text" class="bookData" id = "gender" placeholder = "Gender"</input></div><button type = "button" id = "goBackButton" onclick = "$("body").empty();build_first_interface()">I Hate This, Go Back!</button></div>');
+	outerContainer.html('<div id = bookFlightContainer>\
+	<div id="dataInputContainer">\
+	<input type = "text" class="bookData" id = "firstName" placeholder = "First name"</input>\
+	<input type = "text" class="bookData" id = "lastName" placeholder = "Last name"</input>\
+	<input type = "text" class="bookData" id = "age" placeholder = "Age (1+)" </input>\
+	<input type = "text" class="bookData" id = "gender" placeholder = "Gender"</input>\
+	<button type = "button" id = "goBackButton" onclick = "build_first_interface();">\
+	I Hate This, Go Back!</button>\
+	</div>');
 
 };
