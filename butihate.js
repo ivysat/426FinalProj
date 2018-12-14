@@ -98,28 +98,21 @@ var build_first_interface = function () {
 								
 										//Get each flight matching constraints
 										for (j = 0; j < flights.length; j++) {
+											let flightID = flights[j].id;
 											//Store time to check valid booking
 											let departsAt = new Date(flights[j].departs_at);
 											let arrivesAt = new Date(flights[j].arrives_at);
 											let number = String(flights[j].number);
-											let destination = "fuq async";
 											//Store Destination to generate ticket
 											$.ajax(root_url+'/airports/' + flights[j].arrival_id,{
 												type:'GET',
 												xhrFields: {withCredentials: true},	
-												success: (destination) => {
-													console.log(String(destination.city) + '(' +  String(destination.code) + ")");
-												},
-												error: () => {
-													console.log('error getting destination');
-												}
-											});
-										  
+												success: (destinations) => {
+													let destination = (String(destinations.city) + '(' +  String(destinations.code) + ")");
 
+													//Get and store instances of that flight
 
-											//Get and store instances of that flight
-
-											$.ajax(root_url + "/instances?filter[flight_id]=" + flights[j].id, {
+												$.ajax(root_url + "/instances?filter[flight_id]=" + flightID, {
 												type: 'GET',
 												xhrFields: {withCredentials: true},
 												success: (instances) => {
@@ -136,6 +129,8 @@ var build_first_interface = function () {
 														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
 														//Get number of seats on flight containing age range
 														count = 0;
+
+														
 
 														if (selected == "babies") {
 															for (l = 1; l < 6; l++) {
@@ -199,6 +194,18 @@ var build_first_interface = function () {
 													console.log(e);
 												} 
 											});
+
+													
+												},
+												error: () => {
+													console.log('error getting destination');
+												}
+	
+											});
+										  
+
+
+											
 										}
 									},
 									error: () => {
@@ -230,22 +237,6 @@ var build_first_interface = function () {
 
 
 
-    function getNumTickets(instanceId, age) {
-		//console.log(instanceId);
-		$.ajax(root_url + "/tickets?filter[instance_id]="+instanceId,
-		{
-		  type: 'GET',
-		  xhrFields: {withCredentials: true},
-		  success: (tickets) => {
-			//console.log(root_url + "/tickets?filter[instance_id]="+instanceId);
-			return parseInt(tickets.length);
-		  },
-
-		   error: () => {
-			console.log("error getting number of unwanted people");
-		  }
-		});
-	}
 	
 	function autocomplete(inp, arr) {
 		/*execute a function when someone writes in the text field:*/
