@@ -224,7 +224,7 @@ var build_first_interface = function () {
 				 //Fail to find airport
 			   error: () => {
 					 //LATER NEED TO UPDATE RHS TO BE EMPTY
-				   alert("Error retrieving airport!");
+				   console.log("Error retrieving airport!");
 			   }
 			   //Add airport div to RHS
 
@@ -246,8 +246,8 @@ var build_first_interface = function () {
 				curCount += num.length;
 				curDiv.innerHTML = String(curCount);
 			},
-			error: () => {
-				alert('error signing in, please try again');
+			error: (e) => {
+				console.log('error retrieving tickets, please try again');
 			}
 		});
 	}
