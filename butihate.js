@@ -59,6 +59,27 @@ var build_first_interface = function () {
 	});
 
     $('input[type="radio"]').on('click', () => {
+		$(function() {
+			$.xhrPool = [];
+			$.xhrPool.abortAll = function() {
+				$(this).each(function(i, jqXHR) {   //  cycle through list of recorded connection
+					jqXHR.abort();  //  aborts connection
+					$.xhrPool.splice(i, 1); //  removes from list by index
+				});
+			}
+			$.ajaxSetup({
+				beforeSend: function(jqXHR) { $.xhrPool.push(jqXHR); }, //  annd connection to list
+				complete: function(jqXHR) {
+					var i = $.xhrPool.indexOf(jqXHR);   //  get index for current connection completed
+					if (i > -1) $.xhrPool.splice(i, 1); //  removes from list by index
+				}
+			});
+		});
+		try {
+			$.xhrPool.abortAll();
+		}
+		catch{}
+		
 		let selected = document.querySelector('input[name="age"]:checked').value;
 		console.log(selected);
 		let originLocation = $('#departure').val();
@@ -88,7 +109,6 @@ var build_first_interface = function () {
 				   console.log(originLocation);
 					
 					 if (airports.length == 0) {
-						 //LATER NEED TO UPDATE RHS TO BE EMPTY
 						 console.log("Failed to find any airports in that city");
 						 return;
 					 } else {
@@ -125,7 +145,6 @@ var build_first_interface = function () {
 												success: (instances) => {
 													
 													if (instances.length == 0) {
-														//document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
 														return;
 													}
 													
@@ -238,22 +257,7 @@ var build_first_interface = function () {
 			  });
 			  $flightsContainer.appendTo($('.rhsDiv'));
 
-			  $(function() {
-				$.xhrPool = [];
-				$.xhrPool.abortAll = function() {
-					$(this).each(function(i, jqXHR) {   //  cycle through list of recorded connection
-						jqXHR.abort();  //  aborts connection
-						$.xhrPool.splice(i, 1); //  removes from list by index
-					});
-				}
-				$.ajaxSetup({
-					beforeSend: function(jqXHR) { $.xhrPool.push(jqXHR); }, //  annd connection to list
-					complete: function(jqXHR) {
-						var i = $.xhrPool.indexOf(jqXHR);   //  get index for current connection completed
-						if (i > -1) $.xhrPool.splice(i, 1); //  removes from list by index
-					}
-				});
-			})
+
 
 
 
@@ -407,8 +411,8 @@ var build_second_interface = function(instance){
 				$("#lastName").remove();
 				$("#age").remove();
 				$("#gender").remove();
-				$("#dataInputContainer").append('<a class="twitter-share-button"href="https://twitter.com/intent/tweet?text=I%20specifically%20just%20booked%20a%20flight%20to%20avoid%20a%20certain%20age%20group%20and%20get%20away%20from%20here">Tweet</a>');
-
+				$("#dataInputContainer").append('<a class="twitter-share-button"href="https://twitter.com/intent/tweet?text=I%20specifically%20just%20booked%20a%20flight%20to%20avoid%20a%20certain%20age%20group%20and%20get%20away%20from%20here"  data-size="large">Tweet About Your Booked Flight!</a>');
+				$("#dataInputContainer").append('<h1>Congratulations, you just confirmed your misanthropy! Your confirmation code is ' + confirmation +"</h1>");
 				window.twttr = (function(d, s, id) {
 					var js, fjs = d.getElementsByTagName(s)[0],
 					  t = window.twttr || {};
