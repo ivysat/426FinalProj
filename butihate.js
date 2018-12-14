@@ -77,7 +77,8 @@ var build_first_interface = function () {
 			   type: 'GET',
 			   xhrFields: {withCredentials: true},
 			   success: (airports) => {
-
+				   console.log(originLocation);
+					
 					 if (airports.length == 0) {
 						 //LATER NEED TO UPDATE RHS TO BE EMPTY
 						 console.log("Failed to find any airports in that city");
@@ -85,6 +86,7 @@ var build_first_interface = function () {
 						 return;
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
+								
 								let airport = airports[i];
 								
 								$.ajax(root_url + "/flights?filter[departure_id]="+ airports[i].id, 
@@ -106,7 +108,7 @@ var build_first_interface = function () {
 												type:'GET',
 												xhrFields: {withCredentials: true},	
 												success: (destination) => {
-													return String(destination.city) + '(' +  String(destination.code) + ")";
+													console.log(String(destination.city) + '(' +  String(destination.code) + ")");
 												},
 												error: () => {
 													console.log('error getting destination');
@@ -116,14 +118,14 @@ var build_first_interface = function () {
 
 
 											//Get and store instances of that flight
+
 											$.ajax(root_url + "/instances?filter[flight_id]=" + flights[j].id, {
 												type: 'GET',
 												xhrFields: {withCredentials: true},
 												success: (instances) => {
 													
 													if (instances.length == 0) {
-														document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
-														console.log("We couldn't find any flight instances from that destination");
+														//document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
 														return;
 													}
 													
@@ -173,7 +175,7 @@ var build_first_interface = function () {
 														//For each ticket that matches that flight id, check value from radio button
 														//Append to RHS sorted by that value
 														let $flightDiv = $('<div class="flight"> Destination:  ' + destination +
-														'<br>' +  airport.name + '    on ' + flightDatetime.getFullYear() + ' ' + flightDatetime.getMonth() + ' ' + flightDatetime.getDay() +  
+														'<br>' +  airport.name + '    on ' + flightDatetime +  
 														'<br> Flight Number:  '+ number + '' + 
 														'<br> Departure time:  ' + String(departsAt.getHours()) + ':' + String(departsAt.getMinutes()) +  
 														'<br> Arrival Time:  ' + String(arrivesAt.getHours()) + ':' + String(arrivesAt.getMinutes()) + 
@@ -229,13 +231,13 @@ var build_first_interface = function () {
 
 
     function getNumTickets(instanceId, age) {
+		//console.log(instanceId);
 		$.ajax(root_url + "/tickets?filter[instance_id]="+instanceId,
 		{
 		  type: 'GET',
 		  xhrFields: {withCredentials: true},
-		  async: false,
 		  success: (tickets) => {
-			console.log(tickets.length);
+			//console.log(root_url + "/tickets?filter[instance_id]="+instanceId);
 			return parseInt(tickets.length);
 		  },
 
