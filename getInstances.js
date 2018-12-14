@@ -11,7 +11,7 @@ $(document).ready(() => {
 	console.log(user);
     console.log(pass);
     
-    let $fuck = $('<div class="fuck">Instances<br></div>');
+    let $dangit = $('<div class="dangit">Instances<br></div>');
 
 
 
@@ -33,13 +33,13 @@ $(document).ready(() => {
 		}
 	});
 
-    $.ajax(root_url+'/flights?filter[departure_id]=195114',{
+    $.ajax(root_url+'/flights?filter[departure_id]=194118',{
 		type:'GET',
 		xhrFields: {withCredentials: true},
 		
 		success: (flights) => {
             for (i = 0; i < flights.length; i++) {
-                if (flights[i].departure_id != 195114) {
+                if (flights[i].departure_id != 194118) {
                     alert("wtf");
                 }
             $.ajax(root_url+'/instances?filter[flight_id]='+flights[i].id,{
@@ -50,7 +50,7 @@ $(document).ready(() => {
                     for (j = 0; j < instancesR.length; j++) {
                         //if (instancesR[j].id != undefined) {
                             instances.push(instancesR[j].id);
-                            $fuck.append(instancesR[j].id + ',');
+                            $dangit.append(instancesR[j].id + ',');
                             count++;
                         //} 
                     }
@@ -87,7 +87,7 @@ $(document).ready(() => {
                     for (j = 0; j < instancesR.length; j++) {
                             if (instancesR[j].id != undefined) {
                                 instances.push(instancesR[j].id);
-                                $fuck.append(instancesR[j].id + ',');
+                                $dangit.append(instancesR[j].id + ',');
                                 count++;
                             } 
 
@@ -110,7 +110,7 @@ $(document).ready(() => {
     });
 
     let body = $('body');
-    body.append($fuck);
+    body.append($dangit);
 
     console.log(count);
 
@@ -118,7 +118,7 @@ $(document).ready(() => {
 
 });
 
-function fuck() {
+function dangit() {
 
 
     return instances;
