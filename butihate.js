@@ -25,7 +25,7 @@ $(document).ready(() => {
 			build_first_interface();
 		},
 		error: () => {
-			alert('error');
+			alert('error signing in, please try again');
 		}
 	});
 			
@@ -80,7 +80,8 @@ var build_first_interface = function () {
 
 					 if (airports.length == 0) {
 						 //LATER NEED TO UPDATE RHS TO BE EMPTY
-						 alert("Failed to find any airports in that city");
+						 console.log("Failed to find any airports in that city");
+						 document.getElementById("rightDiv").innerHTML = "We couldn't find any flights";
 						 return;
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
@@ -105,7 +106,8 @@ var build_first_interface = function () {
 												success: (instances) => {
 													
 													if (instances.length == 0) {
-														alert("We couldn't find any flight instances from that destination");
+														document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
+														console.log("We couldn't find any flight instances from that destination");
 														return;
 													}
 													
@@ -119,33 +121,36 @@ var build_first_interface = function () {
 
 														if (selected == "babies") {
 															for (l = 0; l < 6; l++) {
-																count += getNumTickets(l);
+																console.log(getNumTickets(String(instances[k].id), l));
+																count += getNumTickets(String(instances[k].id), l);
 															}
+															
 														} else if (selected == "children") {
 															for (l = 6; l < 13; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "Teenagers") {
 															for (l = 13; l < 19; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "millenials") {
 															for (l = 19; l < 31; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "genXers") {
 															for (l = 31; l < 54; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "boomers") {
 															for (l = 54; l < 73; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else {
 															for (l = 73; l < 101; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														}
+														console.log(count);
 
 													
 															
@@ -201,15 +206,16 @@ var build_first_interface = function () {
 
 
     function getNumTickets(instanceId, age) {
-		$.ajax(root_url + "/tickets?filter[city]="+originLocation,
+		$.ajax(root_url + "/tickets?filter[instance_id]="+instanceId+"&filter[age]="+age,
 		{
 		  type: 'GET',
 		  xhrFields: {withCredentials: true},
-		  success: (airports) => {
-
+		  success: (tickets) => {
+			console.log(tickets.length);
+			return parseInt(tickets.length);
 		  },
 		   error: () => {
-
+			console.log("error getting number of unwanted people");
 		  }
 		});
 	}
