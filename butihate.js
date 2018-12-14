@@ -284,6 +284,6 @@ var build_second_interface = function(){
 	console.log("clearing");
 	let outerContainer = $("#containerDiv");
 	outerContainer.empty();
-	outerContainer.html('<div id = bookFlightContainer><input type = "text" id = "firstName" placeholder = "First name"</input><input type = "text" id = "lastName" placeholder = "Last name"</input><input type = "text" id = "age" placeholder = "Age (1+)" </input><input type = "text" id = "gender" placeholder = "Gender"</input></div>');
+	outerContainer.html('<div id = bookFlightContainer><div id="dataInputContainer"><input type = "text" class="bookData" id = "firstName" placeholder = "First name"</input><input type = "text" class="bookData" id = "lastName" placeholder = "Last name"</input><input type = "text" class="bookData" id = "age" placeholder = "Age (1+)" </input><input type = "text" class="bookData" id = "gender" placeholder = "Gender"</input></div></div>');
 
 };

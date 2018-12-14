@@ -119,3 +119,16 @@ input[type="text"]:focus::-webkit-input-placeholder{
     margin-top: 2.5%;
     border-radius: 15px;
 }
+
+#dataInputContainer{
+    position: relative;
+    width: 50%;
+    margin: auto;
+    margin-top: 5%;
+}
+
+.bookData{
+    text-align: center;
+    position: relative;
+    padding: 22px;
+}
