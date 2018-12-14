@@ -109,3 +109,13 @@ input[type="text"]:focus::-webkit-input-placeholder{
     /*when hovering an item:*/
     background-color: #87ceeb;
 }
+
+#bookFlightContainer{
+    border: thin solid #f3fafd;
+    position: relative;
+    height: 90%;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 2.5%;
+    border-radius: 15px;
+}

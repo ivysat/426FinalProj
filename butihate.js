@@ -23,6 +23,7 @@ $(document).ready(() => {
 		success: () => {
 			console.log('Sign in gucci!');
 			build_first_interface();
+			build_second_interface();
 		},
 		error: () => {
 			alert('error signing in, please try again');
@@ -277,4 +278,12 @@ var build_first_interface = function () {
 	  }
 
 	  autocomplete(document.getElementById("departure"), cities);
+};
+
+var build_second_interface = function(){
+	console.log("clearing");
+	let outerContainer = $("#containerDiv");
+	outerContainer.empty();
+	outerContainer.html('<div id = bookFlightContainer><input type = "text" id = "firstName" placeholder = "First name"</input><input type = "text" id = "lastName" placeholder = "Last name"</input><input type = "text" id = "age" placeholder = "Age (1+)" </input><input type = "text" id = "gender" placeholder = "Gender"</input></div>');
+
 };
