@@ -1,5 +1,5 @@
 root_url = "http://comp426.cs.unc.edu:3001";
-
+var $ticket = $('<div class="ticket"></>');
 
 $(document).ready(() => {
 
@@ -33,6 +33,7 @@ $(document).ready(() => {
 });
 
 var build_first_interface = function () {
+	$ticket.empty();
 	let body = $('body');
 	
 	let cities = ["Kansas City","Phoenix","Newark","Fort Lauderdale","Miami","Long Beach","Savannah","Dayton","Little Rock","New York","Memphis","Boise","El Paso",
@@ -46,8 +47,16 @@ var build_first_interface = function () {
     body.empty();
 
 	body.append('<h1 id = "titleHeader">I Hate  <div class="autocomplete"><input type = "text" id = "departure" placeholder = "Raleigh-durham" </input></div>, But I <i>Really</i> Hate...</h1>');
-	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2><div id = "radioButtonContainer"></div></div></div> <div id = "rightDiv" class="rhsDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Sheesh, you can check the counts on these flights...</h2></div></div> </div>');
+	body.append('<div id = "containerDiv"> <div id = "leftDiv"><div id="whatTheyHateTitleContainer"><h2 id = "whatTheyHateTitle">What do you really hate?</h2><div id = "radioButtonContainer"></div></div></div> <div id = "rightDiv" class="rhsDiv"><div id="flightDataTitleContainer"><h2 id = "flightDataTitle">Sheesh, you can check the counts on these flights...</h2><div class="loading"><\></div></div> </div>');
 	let radioButtonContainerDiv = $('#radioButtonContainer').append('<input type="radio" name="age" value="babies"> Babies<br><input type="radio" name="age" value="children"> Children<br><input type="radio" name="age" value="Teenagers"> Teenagers<br><input type="radio" name="age" value="millenials"> Millenials<br><input type="radio" name="age" value="genXers"> Gen Xers<br><input type="radio" name="age" value="boomers"> Baby Boomers<br><input type="radio" name="age" value="traditionalists"> Traditionalists<br>');
+
+	$(document).ajaxStart(function() {
+		$(".loading").text("Updating flight information");
+	});
+	
+	$(document).ajaxStop(function () {
+		$(".loading").text("Everything is up to date!");
+	});
 
     $('input[type="radio"]').on('click', () => {
 		let selected = document.querySelector('input[name="age"]:checked').value;
@@ -67,8 +76,6 @@ var build_first_interface = function () {
 		let currentDatetime = new Date(); 
 
 
-		//Map flight -> instances
-		//Map instances -> tickets	
 		let flightInfo = new Map();
 		
 	
@@ -77,12 +84,12 @@ var build_first_interface = function () {
 			   type: 'GET',
 			   xhrFields: {withCredentials: true},
 			   success: (airports) => {
+					//document.getElementById("rightDiv").innerHTML = "Searching for your ideal flight";
 				   console.log(originLocation);
 					
 					 if (airports.length == 0) {
 						 //LATER NEED TO UPDATE RHS TO BE EMPTY
 						 console.log("Failed to find any airports in that city");
-						 document.getElementById("rightDiv").innerHTML = "We couldn't find any matching flights";
 						 return;
 					 } else {
 							for  (i = 0; i < airports.length; i++) {
@@ -112,7 +119,7 @@ var build_first_interface = function () {
 
 													//Get and store instances of that flight
 
-												$.ajax(root_url + "/instances?filter[flight_id]=" + flightID, {
+												$.ajax(root_url + "/instances?filter[flight_id]=" + flightID , {
 												type: 'GET',
 												xhrFields: {withCredentials: true},
 												success: (instances) => {
@@ -124,6 +131,7 @@ var build_first_interface = function () {
 													
 													//Only do flights that are in the future and not cancelled
 													for (k = 0; k < instances.length; k++) {
+														
 														let date = String(instances[k].date).split('-');
 														let flightDatetime = new Date(parseInt(date[0]), parseInt(date[1]) -1, parseInt(date[2]), departsAt.getHours(), departsAt.getMinutes(),0,0);
 														if (flightDatetime > currentDatetime && instances[k].is_cancelled != true) {
@@ -177,7 +185,7 @@ var build_first_interface = function () {
 
 
 
-														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="build_second_interface();">Buy Ticket</>');
+														let $checkOut = $('<button type="button" id="checkout" class="sort" onclick="$.xhrPool.abortAll();build_second_interface('+instances[k].id+');">Buy Ticket</>');
 
 														//On checkout click, tear down and reacreate DOM
 														$checkOut.appendTo($flightDiv);
@@ -223,12 +231,29 @@ var build_first_interface = function () {
 				 //Fail to find airport
 			   error: () => {
 					 //LATER NEED TO UPDATE RHS TO BE EMPTY
-				   alert("Error retrieving airport!");
+				   console.log("Error retrieving airport!");
 			   }
 			   //Add airport div to RHS
 
 			  });
 			  $flightsContainer.appendTo($('.rhsDiv'));
+
+			  $(function() {
+				$.xhrPool = [];
+				$.xhrPool.abortAll = function() {
+					$(this).each(function(i, jqXHR) {   //  cycle through list of recorded connection
+						jqXHR.abort();  //  aborts connection
+						$.xhrPool.splice(i, 1); //  removes from list by index
+					});
+				}
+				$.ajaxSetup({
+					beforeSend: function(jqXHR) { $.xhrPool.push(jqXHR); }, //  annd connection to list
+					complete: function(jqXHR) {
+						var i = $.xhrPool.indexOf(jqXHR);   //  get index for current connection completed
+						if (i > -1) $.xhrPool.splice(i, 1); //  removes from list by index
+					}
+				});
+			})
 
 
 
@@ -236,7 +261,7 @@ var build_first_interface = function () {
 
 	//Instance will be unique id for num div
 	function getNumTickets(instance, age) {
-		$.ajax(root_url+'/tickets?filter[age]='+age+'&filter[instance_id]='+instance, {
+		var request = $.ajax(root_url+'/tickets?filter[age]='+age+'&filter[instance_id]='+instance, {
 			type:'GET',
 			xhrFields: {withCredentials: true},
 			success: (num) => {
@@ -245,8 +270,8 @@ var build_first_interface = function () {
 				curCount += num.length;
 				curDiv.innerHTML = String(curCount);
 			},
-			error: () => {
-				alert('error signing in, please try again');
+			error: (e) => {
+				console.log('error retrieving tickets, please try again');
 			}
 		});
 	}
@@ -299,14 +324,7 @@ var build_first_interface = function () {
 	  });
 	  }
 
-	  function buyTicket() {
-		//Give unique id to customer
-		//Rebuild DOM for simple checkout screen
-	  }
-
-	  function returnToSearch() {
-		//Button on second 
-	  }
+	
 
 	  autocomplete(document.getElementById("departure"), cities);
 
@@ -315,7 +333,7 @@ var build_first_interface = function () {
 
 };
 
-var build_second_interface = function(){
+var build_second_interface = function(instance){
 	console.log("clearing");
 	let outerContainer = $("#containerDiv");
 	outerContainer.empty();
@@ -325,6 +343,96 @@ var build_second_interface = function(){
 	});
 
 	$("#submitButton").click(function(){
-		alert("hello");
+
+
+
+
+		$.ajax(root_url+'/tickets',{
+			type:'POST',
+			xhrFields: {withCredentials: true},
+			
+			data: {
+				"ticket": {
+					"first_name":   $("#firstName").val(),
+					"last_name":    $("#lastName").val(),
+					"age":          $("#age").val(),
+					"gender":       $("#gender").val(),
+					"is_purchased": true,
+					"instance_id":  instance,
+				  }
+			},
+			success: () => {
+				console.log('Successfully added ticket!');
+				let confirmation = Math.random().toString(36).substring(7);
+				$.ajax(root_url+'/itineraries', {
+					type:'POST',
+					xhrFields: {withCredentials: true},
+					
+					data: {
+						"itinerary": {
+							"confirmation_code": confirmation,
+							"info": "Confirmation for " +$("#firstName").val() + " " + $("#lastName").val()
+						  }
+					},
+					success: () => {
+						console.log('Successfully added ticket!');
+						//CHANGE INTERFACE
+		
+					},
+					error: () => {
+						alert('Could not book, please try again');
+					}
+				});
+
+				$.ajax(root_url+'/instances/'+instance, {
+					type:'PUT',
+					xhrFields: {withCredentials: true},
+		
+					data: {
+						"instance": {
+							"info": "A hateful person is on this flight"
+						  }
+					},
+					success() {
+						console.log('NuT');
+					},
+					error() {
+						console.log("couldn't warn airline about asshole");
+					}
+		
+		
+				});
+				$("#submitButton").remove();
+				$("#firstName").remove();
+				$("#lastName").remove();
+				$("#age").remove();
+				$("#gender").remove();
+				$("#dataInputContainer").append('<a class="twitter-share-button"href="https://twitter.com/intent/tweet?text=I%20specifically%20just%20booked%20a%20flight%20to%20avoid%20a%20certain%20age%20group%20and%20get%20away%20from%20here">Tweet</a>');
+
+				window.twttr = (function(d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0],
+					  t = window.twttr || {};
+					if (d.getElementById(id)) return t;
+					js = d.createElement(s);
+					js.id = id;
+					js.src = "https://platform.twitter.com/widgets.js";
+					fjs.parentNode.insertBefore(js, fjs);
+				  
+					t._e = [];
+					t.ready = function(f) {
+					  t._e.push(f);
+					};
+				  
+					return t;
+				});
+		
+
+			},
+			error: () => {
+				alert('Could not book, please try again');
+			}
+		});
+
+
 	});
 };
