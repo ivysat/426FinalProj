@@ -33,13 +33,13 @@ $(document).ready(() => {
 		}
 	});
 
-    $.ajax(root_url+'/flights?filter[departure_id]=194118',{
+    $.ajax(root_url+'/flights?filter[departure_id]=195114',{
 		type:'GET',
 		xhrFields: {withCredentials: true},
 		
 		success: (flights) => {
             for (i = 0; i < flights.length; i++) {
-                if (flights[i].departure_id != 194118) {
+                if (flights[i].departure_id != 195114) {
                     alert("wtf");
                 }
             $.ajax(root_url+'/instances?filter[flight_id]='+flights[i].id,{
