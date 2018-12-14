@@ -76,8 +76,6 @@ var build_first_interface = function () {
 		let currentDatetime = new Date(); 
 
 
-		//Map flight -> instances
-		//Map instances -> tickets	
 		let flightInfo = new Map();
 		
 	
@@ -121,7 +119,7 @@ var build_first_interface = function () {
 
 													//Get and store instances of that flight
 
-												$.ajax(root_url + "/instances?filter[flight_id]=" + flightID, {
+												$.ajax(root_url + "/instances?filter[flight_id]=" + flightID , {
 												type: 'GET',
 												xhrFields: {withCredentials: true},
 												success: (instances) => {
@@ -345,6 +343,96 @@ var build_second_interface = function(instance){
 	});
 
 	$("#submitButton").click(function(){
-		alert("hello");
+
+
+
+
+		$.ajax(root_url+'/tickets',{
+			type:'POST',
+			xhrFields: {withCredentials: true},
+			
+			data: {
+				"ticket": {
+					"first_name":   $("#firstName").val(),
+					"last_name":    $("#lastName").val(),
+					"age":          $("#age").val(),
+					"gender":       $("#gender").val(),
+					"is_purchased": true,
+					"instance_id":  instance,
+				  }
+			},
+			success: () => {
+				console.log('Successfully added ticket!');
+				let confirmation = Math.random().toString(36).substring(7);
+				$.ajax(root_url+'/itineraries', {
+					type:'POST',
+					xhrFields: {withCredentials: true},
+					
+					data: {
+						"itinerary": {
+							"confirmation_code": confirmation,
+							"info": "Confirmation for " +$("#firstName").val() + " " + $("#lastName").val()
+						  }
+					},
+					success: () => {
+						console.log('Successfully added ticket!');
+						//CHANGE INTERFACE
+		
+					},
+					error: () => {
+						alert('Could not book, please try again');
+					}
+				});
+
+				$.ajax(root_url+'/instances/'+instance, {
+					type:'PUT',
+					xhrFields: {withCredentials: true},
+		
+					data: {
+						"instance": {
+							"info": "A hateful person is on this flight"
+						  }
+					},
+					success() {
+						console.log('NuT');
+					},
+					error() {
+						console.log("couldn't warn airline about asshole");
+					}
+		
+		
+				});
+				$("#submitButton").remove();
+				$("#firstName").remove();
+				$("#lastName").remove();
+				$("#age").remove();
+				$("#gender").remove();
+				$("#dataInputContainer").append('<a class="twitter-share-button"href="https://twitter.com/intent/tweet?text=I%20specifically%20just%20booked%20a%20flight%20to%20avoid%20a%20certain%20age%20group%20and%20get%20away%20from%20here">Tweet</a>');
+
+				window.twttr = (function(d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0],
+					  t = window.twttr || {};
+					if (d.getElementById(id)) return t;
+					js = d.createElement(s);
+					js.id = id;
+					js.src = "https://platform.twitter.com/widgets.js";
+					fjs.parentNode.insertBefore(js, fjs);
+				  
+					t._e = [];
+					t.ready = function(f) {
+					  t._e.push(f);
+					};
+				  
+					return t;
+				});
+		
+
+			},
+			error: () => {
+				alert('Could not book, please try again');
+			}
+		});
+
+
 	});
 };
