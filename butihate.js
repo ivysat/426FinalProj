@@ -119,31 +119,33 @@ var build_first_interface = function () {
 
 														if (selected == "babies") {
 															for (l = 0; l < 6; l++) {
-																count += getNumTickets(l);
+																console.log(getNumTickets(String(instances[k].id), l));
+																count += getNumTickets(String(instances[k].id), l);
 															}
+															
 														} else if (selected == "children") {
 															for (l = 6; l < 13; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "Teenagers") {
 															for (l = 13; l < 19; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "millenials") {
 															for (l = 19; l < 31; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "genXers") {
 															for (l = 31; l < 54; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else if (selected == "boomers") {
 															for (l = 54; l < 73; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														} else {
 															for (l = 73; l < 101; l++) {
-																count += getNumTickets(l);
+																count += getNumTickets(String(instances[k].id), l);
 															}
 														}
 
@@ -201,15 +203,16 @@ var build_first_interface = function () {
 
 
     function getNumTickets(instanceId, age) {
-		$.ajax(root_url + "/tickets?filter[city]="+originLocation,
+		$.ajax(root_url + "/tickets?filter[instance_id]="+instanceId+"&filter[age]="+age,
 		{
 		  type: 'GET',
 		  xhrFields: {withCredentials: true},
-		  success: (airports) => {
-
+		  success: (tickets) => {
+			console.log(tickets.length);
+			return parseInt(tickets.length);
 		  },
 		   error: () => {
-
+			alert("error getting number of unwanted people");
 		  }
 		});
 	}
