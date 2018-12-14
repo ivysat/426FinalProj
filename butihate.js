@@ -23,7 +23,6 @@ $(document).ready(() => {
 		success: () => {
 			console.log('Sign in gucci!');
 			build_first_interface();
-			build_second_interface();
 		},
 		error: () => {
 			alert('error signing in, please try again');
